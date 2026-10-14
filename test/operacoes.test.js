@@ -74,3 +74,83 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('49. deve calcular o triplo de um número', () => { expect(triplo(10)).toBe(30); });
   test('50. deve calcular a metade de um número', () => { expect(metade(20)).toBe(10); });
 });
+
+describe('Testes adicionais para matar mutantes sobreviventes', () => {
+  // === Ramos de erro nunca exercitados e mensagens não verificadas ===
+  describe('Mensagens e ramos de erro', () => {
+    test('divisao deve lançar a mensagem exata para divisor zero', () => {
+      expect(() => divisao(5, 0)).toThrow('Divisão por zero não é permitida.');
+    });
+    test('raizQuadrada deve lançar erro para número negativo', () => {
+      expect(() => raizQuadrada(-1)).toThrow('Não é possível calcular a raiz quadrada de um número negativo.');
+    });
+    test('fatorial deve lançar erro para número negativo', () => {
+      expect(() => fatorial(-1)).toThrow('Fatorial não é definido para números negativos.');
+    });
+    test('maximoArray deve lançar erro para array vazio', () => {
+      expect(() => maximoArray([])).toThrow('Array vazio не possui valor máximo.');
+    });
+    test('minimoArray deve lançar erro para array vazio', () => {
+      expect(() => minimoArray([])).toThrow('Array vazio не possui valor mínimo.');
+    });
+    test('inverso deve lançar erro para zero', () => {
+      expect(() => inverso(0)).toThrow('Não é possível inverter o número zero.');
+    });
+    test('medianaArray deve lançar erro para array vazio', () => {
+      expect(() => medianaArray([])).toThrow('Array vazio не possui mediana.');
+    });
+  });
+
+  // === Valores no limite exato das condições ===
+  describe('Valores de fronteira', () => {
+    test('raizQuadrada de zero deve ser zero', () => { expect(raizQuadrada(0)).toBe(0); });
+    test('fatorial de zero deve ser 1', () => { expect(fatorial(0)).toBe(1); });
+    test('fatorial de 1 deve ser 1', () => { expect(fatorial(1)).toBe(1); });
+    test('mediaArray de array vazio deve ser zero', () => { expect(mediaArray([])).toBe(0); });
+    test('produtoArray de array vazio deve ser 1', () => { expect(produtoArray([])).toBe(1); });
+  });
+
+  // === Predicados que só eram testados no caso verdadeiro ===
+  describe('Predicados no caso falso', () => {
+    test('isPar deve retornar false para um número ímpar', () => { expect(isPar(3)).toBe(false); });
+    test('isImpar deve retornar false para um número par', () => { expect(isImpar(2)).toBe(false); });
+    test('isDivisivel deve retornar false quando há resto', () => { expect(isDivisivel(10, 3)).toBe(false); });
+    test('isEqual deve retornar false para números diferentes', () => { expect(isEqual(7, 8)).toBe(false); });
+    test('isMaiorQue deve retornar false quando é menor', () => { expect(isMaiorQue(5, 10)).toBe(false); });
+    test('isMenorQue deve retornar false quando é maior', () => { expect(isMenorQue(10, 5)).toBe(false); });
+  });
+
+  describe('Igualdade em comparações', () => {
+    test('isMaiorQue deve retornar false para números iguais', () => { expect(isMaiorQue(5, 5)).toBe(false); });
+    test('isMenorQue deve retornar false para números iguais', () => { expect(isMenorQue(5, 5)).toBe(false); });
+  });
+
+  describe('isPrimo', () => {
+    test('deve retornar false para zero', () => { expect(isPrimo(0)).toBe(false); });
+    test('deve retornar false para 1', () => { expect(isPrimo(1)).toBe(false); });
+    test('deve retornar true para 2', () => { expect(isPrimo(2)).toBe(true); });
+    test('deve retornar false para um número composto par', () => { expect(isPrimo(4)).toBe(false); });
+    test('deve retornar false para um número composto ímpar', () => { expect(isPrimo(9)).toBe(false); });
+  });
+
+  describe('clamp', () => {
+    test('deve retornar o mínimo quando o valor está abaixo do intervalo', () => { expect(clamp(-5, 0, 10)).toBe(0); });
+    test('deve retornar o máximo quando o valor está acima do intervalo', () => { expect(clamp(15, 0, 10)).toBe(10); });
+    // toBe usa Object.is, que diferencia -0 de 0: só assim se observa se foi
+    // devolvido o próprio valor ou o limite quando os dois são iguais.
+    test('deve retornar o próprio valor quando ele é igual ao mínimo', () => { expect(clamp(-0, 0, 10)).toBe(-0); });
+    test('deve retornar o próprio valor quando ele é igual ao máximo', () => { expect(clamp(-0, -10, 0)).toBe(-0); });
+  });
+
+  // === Entradas que não anulam a multiplicação/divisão ===
+  describe('Conversões de temperatura', () => {
+    test('deve converter 100 graus Celsius para 212 Fahrenheit', () => { expect(celsiusParaFahrenheit(100)).toBe(212); });
+    test('deve converter 212 graus Fahrenheit para 100 Celsius', () => { expect(fahrenheitParaCelsius(212)).toBe(100); });
+  });
+
+  describe('medianaArray', () => {
+    test('deve ordenar um array ímpar desordenado', () => { expect(medianaArray([5, 1, 3])).toBe(3); });
+    test('deve ordenar um array com números negativos', () => { expect(medianaArray([-5, 10, 0, -10, 5])).toBe(0); });
+    test('deve calcular a média dos dois centrais em um array par', () => { expect(medianaArray([4, 1, 3, 2])).toBe(2.5); });
+  });
+});
