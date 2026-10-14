@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "mutate": "stryker run"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
@@ -19,6 +20,5 @@
     "transform": {
       "^.+\\.js$": "babel-jest"
     }
-  },
-  "mutate": "stryker run"
+  }
 }
